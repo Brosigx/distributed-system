@@ -156,12 +156,6 @@ make
 
 ---
 
-## License
-
-This project is under the CC0 1.0 Universal license, which means you can use, modify, and distribute the code without restrictions.
-
----
-
 ## Credits
 
 Developed by Ambrosio Ramón Guardiola and Aurélio Sánchez Soriano.
