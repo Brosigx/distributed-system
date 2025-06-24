@@ -1,4 +1,4 @@
-# Sistemas Distribuidos - Proyecto 2024-2025
+# Sistema Distribuido
 
 Este repositorio contiene el código y la infraestructura para un sistema distribuido desarrollado donde se ha implementado tanto el backend como el frontend.
 
