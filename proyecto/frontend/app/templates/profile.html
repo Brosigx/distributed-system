@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block custom_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+{% endblock %}
+{% block content %}
+<div class="center-container">
+    <div class="text-container">
+        <p>Welcome {{ user.name }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Conversations created: {{ user.n_dialogues() }} </p>
+        <p>Messages sent: {{ user.n_messages() }}</p>
+        <p>Conversations finished: {{ user.n_finished() }}</p>
+    </div>
+</div>
+{% endblock %}

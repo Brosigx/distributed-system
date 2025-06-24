@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block custom_style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid h-100">
+  <div class="row h-100">
+
+    <!-- Sidebar -->
+    <div class="col-md-2 bg-dark sidebar">
+      <div class="d-flex flex-column h-100 px-2 pt-2 text-white">
+        <!-- Encabezado con "Chat" -->
+        <div class="sidebar-header">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="fs-5">Chat</span>
+          </div>
+          <hr class="mt-0">
+        </div>
+
+        <!-- Nueva sección para crear chats -->
+        <div class="mt-2 mb-3">
+          <form method="POST" id="new-chat-form">
+            <input type="hidden" name="action" value="new">
+            <div class="input-group input-group-sm">
+              <input type="text" name="chat_name" id="new-chat-input" class="form-control form-control-sm"
+                placeholder="New chat" autocomplete="off">
+              <button class="btn btn-outline-light" type="submit">
+                <i class="bi bi-plus-lg me-1"></i>New
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Lista de chats -->
+        <div class="flex-grow-1">
+          <ul class="nav flex-column">
+            {% for dialogue in dialogues %}
+            <li class="nav-item">
+              <div class="chat-item-container">
+                <form method="POST">
+                  <input type="hidden" name="dialogue_id" value="{{ dialogue.dialogue_id }}">
+                  <button class="btn btn-chat text-white py-2" type="submit" name="action" value="select">
+                    {{ dialogue.dialogue_id }}
+                  </button>
+                </form>
+                <form method="POST">
+                  <input type="hidden" name="dialogue_id" value="{{ dialogue.dialogue_id }}">
+                  <button class="chat-delete-btn" type="submit" name="action" value="delete">
+                    <i class="bi bi-trash chat-delete-btn__icon"></i>
+                    🗑
+                  </button>
+                </form>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Área principal -->
+    {% if current_conversation %}
+    <div class="col-md-10 p-0 main-content">
+      <div class="d-flex flex-column h-100">
+        <!-- Header compacto -->
+        <div class="chat-header p-3 bg-light border-bottom">
+          <h5 class="mb-0">Chat</h5>
+        </div>
+
+        <!-- Historial del chat -->
+        <div id="chat-messages" class="flex-grow-1 p-4 chat-history">
+          {% for msg in current_conversation.dialogue %}
+          <div class="message-bubble sent">
+            <p>{{ msg[0].prompt }}</p>
+            <span class="timestamp">{{ msg[0].timestamp }}</span>
+          </div>
+          <div class="message-bubble received">
+            <p>{{ msg[0].answer }}</p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Barra de escritura -->
+        <div class="message-input-container">
+          <form method="POST" class="d-flex justify-content-center p-3">
+            <div class="right-error">
+              <div id="alert-messages">
+                
+              </div>
+            </div>
+            <div class="input-wrapper">
+              <textarea id="message-input" class="form-control message-input" placeholder="Write your message..."
+                rows="1" name="message"></textarea>
+              <button class="btn btn-message-send" type="submit" name="action" value="send">
+                <i class="bi bi-send me-2"></i>Enviar
+              </button>
+              <button class="btn btn-message-send" type="submit" name="action" value="end">
+                <i class="bi bi-send me-2"></i>End Conversation
+              </button>
+            </div>
+            <div class="right-error">
+              {% if error %}
+              <strong>Error: </strong> {{ error }}
+              {% endif %}
+              {% if success %}
+              <br>
+              <span class="right-correct">{{ success }}</span>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <!-- Mensaje de "No hay chats" -->
+    {% if not current_conversation %}
+    <div class="col-md-10 p-0 main-content">
+      <div class="d-flex flex-column h-100">
+        <div class="chat-header p-3 bg-light border-bottom">
+          <h5 class="mb-0">Chat</h5>
+        </div>
+        <div class="flex-grow-1 d-flex justify-content-center align-items-center flex-column">
+          <p class="no-chats-message">Select a chat.</p>
+          {% if error %}
+          <p class="error-message">{{ error }}</p>
+          {% endif %}
+          {% if success %}
+          <p class="success-message">{{ success }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% for dialogue in dialogues %}
+  {% if dialogue.status == 'BUSY' %}
+  <script>
+    setInterval(() => {
+      console.log("Checking prompts...");
+      fetch('/check_prompts')
+        .then(response => {
+          if (response.ok) {
+            console.log("Prompts checked successfully.");
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .then(data => {
+            // Selecciona el contenedor donde se mostrará el mensaje
+            const receivedMessages = document.getElementById('alert-messages');
+
+            // Limpia el contenido anterior
+            receivedMessages.innerHTML = '';
+
+            // Procesa cada elemento de la lista y agrégalo al contenedor
+            data.forEach(dialogueId => {
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `Nuevo mensaje en el chat: ${dialogueId}`;
+                receivedMessages.appendChild(messageElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error al procesar la lista:', error);
+        });
+    }, 5000);
+  </script>
+  {% endif %}
+  {% endfor %}
+  {% endblock %}

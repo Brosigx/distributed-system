@@ -1,0 +1,14 @@
+/* Centrar el contenedor en la pantalla */
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    text-align: center;
+}
+
+/* Estilo para el texto */
+.text-container p {
+    font-size: 40px; 
+    margin: 10px 0; 
+}

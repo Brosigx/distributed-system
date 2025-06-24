@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block custom_style %}
+ <!-- Custom styles for this template -->
+    <link href="/static/index.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="main-container">
+        <img src="{{ url_for('serve_static', path='llama.png') }}" alt="LlamaChat Logo" class="logo">
+        <p class="description">¡BIENVENIDO A LLAMACHAT!</p>
+    </div>
+{% endblock %}

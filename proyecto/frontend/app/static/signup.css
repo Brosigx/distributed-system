@@ -1,0 +1,64 @@
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .box {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .field {
+    margin-bottom: 20px;
+  }
+  
+  .control {
+    position: relative;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #181439;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .notification {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .notification.success{
+    color:green;
+  }
+
+  .notification.danger{
+    color:red;
+  }
+
+  .notification.warning{
+    color:orange;
+  }
