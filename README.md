@@ -1,149 +1,149 @@
-# Sistema Distribuido
+# Distributed Systems
 
-Este repositorio contiene el código y la infraestructura para un sistema distribuido desarrollado donde se ha implementado tanto el backend como el frontend.
+This repository contains the code and infrastructure for a distributed system developed which includes back & front end.
 
-## Tabla de Contenidos
+## Table of Contents
 
-- [Descripción General](#descripción-general)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
+- [General Description](#general-description)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
   - [Backend](#backend)
   - [Frontend](#frontend)
-  - [Bases de Datos](#bases-de-datos)
-  - [Contenedores y Orquestación](#contenedores-y-orquestación)
+  - [Databases](#databases)
+  - [Containers and Orchestration](#containers-and-orchestration)
   - [CI/CD](#cicd)
-- [Cómo Construir y Ejecutar](#cómo-construir-y-ejecutar)
-- [Licencia](#licencia)
+- [How to Build and Run](#how-to-build-and-run)
+- [License](#license)
 
 ---
 
-## Descripción General
+## General Description
 
-El sistema implementa una arquitectura distribuida compuesta por varios servicios backend (REST, gRPC, DAO), un frontend web, y servicios de bases de datos (MongoDB y MySQL), todo orquestado mediante Docker y Docker Compose. El objetivo es proporcionar una plataforma de chat (LlamaChat) con gestión de usuarios, conversaciones y diálogos, soportando distintos backends de almacenamiento y comunicación.
+The system implements a distributed architecture composed of several backend services (REST, gRPC, DAO), a web frontend, and database services (MongoDB and MySQL), all orchestrated using Docker and Docker Compose. The goal is to provide a chat platform (LlamaChat) with user, conversation, and dialogue management, supporting different storage and communication backends.
 
 ---
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 proyecto/
 │
-├── backend/                # Lógica de acceso a datos (DAO)
-├── backend-grpc/           # Servicios gRPC (definición e implementación)
-├── backend-rest/           # Servicio REST principal
-├── backend-rest-externo/   # Servicio REST externo
-├── db-mongo/               # Dockerfile y scripts de inicialización para MongoDB
-├── db-mysql/               # Dockerfile y scripts de inicialización para MySQL
-├── frontend/               # Aplicación web (Flask)
-├── llamachat/              # Servicio LLM (modelo de lenguaje)
-├── docker-compose-devel-mongo.yml # Orquestación de servicios en desarrollo
-├── Makefile                # Tareas de automatización
-├── mongo.env / sql.env     # Variables de entorno para bases de datos
-└── README.md               # Este archivo
+├── backend/                # Data Access Logic (DAO)
+├── backend-grpc/           # gRPC services (definition and implementation)
+├── backend-rest/           # Main REST service
+├── backend-rest-externo/   # External REST service
+├── db-mongo/               # Dockerfile and initialization scripts for MongoDB
+├── db-mysql/               # Dockerfile and initialization scripts for MySQL
+├── frontend/               # Web application (Flask)
+├── llamachat/              # LLM service (language model)
+├── docker-compose-devel-mongo.yml # Service orchestration for development
+├── Makefile                # Automation tasks
+├── mongo.env / sql.env     # Environment variables for databases
+└── README.md               # This file
 ```
 
 ---
 
-## Tecnologías Utilizadas
+## Technologies Used
 
 ### Backend
 
 - **Java 17**  
-  Todos los servicios backend están escritos en Java 17, usando Maven como sistema de construcción y gestión de dependencias.
+  All backend services are written in Java 17, using Maven as the build and dependency management system.
 
 - **Maven**  
-  Usado para compilar, testear y empaquetar los servicios Java. Incluye plugins para integración con Protobuf/gRPC y gestión de dependencias.
+  Used to compile, test, and package Java services. Includes plugins for Protobuf/gRPC integration and dependency management.
 
 - **gRPC**  
-  Comunicación eficiente entre servicios mediante RPC.
-  - Definición de servicios en Protobuf.
-  - Generación automática de código cliente/servidor.
-  - Implementación en `GrpcServiceImpl`.
+  Efficient communication between services via RPC.
+  - Service definitions in Protobuf.
+  - Automatic generation of client/server code.
+  - Implementation in `GrpcServiceImpl`.
 
 - **REST (JAX-RS/Servlet)**  
-  Servicios RESTful para exponer la lógica de negocio y acceso a datos.
+  RESTful services to expose business logic and data access.
 
 - **DAO Pattern**  
-  Acceso abstracto a datos, soportando tanto MongoDB como MySQL.
+  Abstract data access, supporting both MongoDB and MySQL.
 
 ### Frontend
 
 - **Python 3.12 + Flask**  
-  Aplicación web ligera para la interfaz de usuario, autenticación y gestión de sesiones.
-  - Uso de `flask-login` para autenticación.
-  - Formularios con `flask-WTF`.
-  - Plantillas HTML con Jinja2.
-  - Estilos personalizados en CSS.
+  Lightweight web application for the user interface, authentication, and session management.
+  - Uses `flask-login` for authentication.
+  - Forms with `flask-WTF`.
+  - HTML templates with Jinja2.
+  - Custom CSS styles.
 
 - **Bootstrap**  
-  Framework CSS para diseño responsivo y componentes UI.
+  CSS framework for responsive design and UI components.
 
-### Bases de Datos
+### Databases
 
 - **MongoDB**  
-  Base de datos NoSQL para almacenamiento de usuarios y conversaciones.
-  - Inicialización automática con scripts.
-  - Acceso desde Java usando el driver oficial.
+  NoSQL database for storing users and conversations.
+  - Automatic initialization with scripts.
+  - Accessed from Java using the official driver.
 
 - **MySQL**  
-  Base de datos relacional para almacenamiento alternativo.
-  - Inicialización con scripts SQL.
-  - Acceso desde Java usando el conector oficial.
+  Relational database for alternative storage.
+  - Initialization with SQL scripts.
+  - Accessed from Java using the official connector.
 
-### Contenedores y Orquestación
+### Containers and Orchestration
 
 - **Docker**  
-  Cada componente principal tiene su propio Dockerfile para facilitar la construcción y despliegue.
+  Each main component has its own Dockerfile to facilitate building and deployment.
 
 - **Docker Compose**  
-  Orquestación de todos los servicios para desarrollo y pruebas locales.
-  - `docker-compose-devel-mongo.yml`: Levanta todos los servicios necesarios para el entorno de desarrollo con MongoDB.
+  Orchestrates all services for local development and testing.
+  - `docker-compose-devel-mongo.yml`: Starts all necessary services for the development environment with MongoDB.
 
 ### CI/CD
 
 - **GitHub Actions**  
-  Integración continua definida en `.github/workflows/makefile.yml`.
-  - Compila y construye el proyecto automáticamente en cada push o pull request a ramas principales.
+  Continuous integration defined in `.github/workflows/makefile.yml`.
+  - Compiles and builds the project automatically on every push or pull request to main branches.
 
 ---
 
-## Cómo Construir y Ejecutar
+## How to Build and Run
 
-### Requisitos
+### Requirements
 
-- Docker y Docker Compose instalados.
-- (Opcional) Java 17 y Maven para desarrollo local sin contenedores.
-- Python 3.12 para desarrollo del frontend fuera de Docker.
+- Docker and Docker Compose installed.
+- (Optional) Java 17 and Maven for local development without containers.
+- Python 3.12 for frontend development outside Docker.
 
-### Ejecución en Desarrollo
+### Development Execution
 
-1. **Clonar el repositorio**
+1. **Clone the repository**
    ```sh
-   git clone <url-del-repo>
+   git clone <repo-url>
    cd proyecto
    ```
 
-2. **Levantar todos los servicios con Docker Compose**
+2. **Start all services with Docker Compose**
    ```sh
    docker-compose -f docker-compose-devel-mongo.yml up --build
    ```
 
-   Esto iniciará:
-   - Frontend Flask en [http://localhost:5010](http://localhost:5010)
-   - Backend REST en [http://localhost:8080](http://localhost:8080)
-   - Backend REST externo en [http://localhost:8081](http://localhost:8081)
-   - Servicio gRPC en el puerto 50051
-   - MongoDB en el puerto 27017
-   - LlamaChat (servicio LLM) en el puerto 5020
+   This will start:
+   - Flask frontend at [http://localhost:5010](http://localhost:5010)
+   - REST backend at [http://localhost:8080](http://localhost:8080)
+   - External REST backend at [http://localhost:8081](http://localhost:8081)
+   - gRPC service on port 50051
+   - MongoDB on port 27017
+   - LlamaChat (LLM service) on port 5020
 
-3. **Parar los servicios**
+3. **Stop the services**
    ```sh
    docker-compose -f docker-compose-devel-mongo.yml down
    ```
 
-### Construcción Manual
+### Manual Build
 
-Cada subdirectorio contiene un Makefile para construir imágenes individuales:
+Each subdirectory contains a Makefile to build individual images:
 ```sh
 cd backend
 make
@@ -156,12 +156,12 @@ make
 
 ---
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia CC0 1.0 Universal, lo que significa que puedes usar, modificar y distribuir el código sin restricciones.
+This project is under the CC0 1.0 Universal license, which means you can use, modify, and distribute the code without restrictions.
 
 ---
 
-## Créditos
+## Credits
 
-Desarrollado por Ambrosio Ramón Guardiola, y Aurélio Sánchez Soriano.
+Developed by Ambrosio Ramón Guardiola and Aurélio Sánchez Soriano.
